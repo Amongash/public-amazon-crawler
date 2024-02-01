@@ -1,3 +1,7 @@
+import settings
+from requests.exceptions import RequestException
+from BeautifulSoup import BeautifulSoup
+import redis
 import os
 import random
 from datetime import datetime
@@ -6,16 +10,12 @@ from urlparse import urlparse
 import eventlet
 requests = eventlet.import_patched('requests.__init__')
 time = eventlet.import_patched('time')
-import redis
 
-from BeautifulSoup import BeautifulSoup
-from requests.exceptions import RequestException
-
-import settings
 
 num_requests = 0
 
-redis = redis.StrictRedis(host=settings.redis_host, port=settings.redis_port, db=settings.redis_db)
+redis = redis.StrictRedis(host=settings.redis_host,
+                          port=settings.redis_port, db=settings.redis_db)
 
 
 def make_request(url, return_soup=True):
@@ -28,7 +28,8 @@ def make_request(url, return_soup=True):
 
     global num_requests
     if num_requests >= settings.max_requests:
-        raise Exception("Reached the max number of requests: {}".format(settings.max_requests))
+        raise Exception("Reached the max number of requests: {}".format(
+            settings.max_requests))
 
     proxies = get_proxy()
     try:
@@ -62,6 +63,7 @@ def format_url(url):
     else:
         query = "?"
         for piece in u.query.split("&"):
+
             k, v = piece.split("=")
             if k in settings.allowed_params:
                 query += "{k}={v}&".format(**locals())

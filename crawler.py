@@ -23,12 +23,17 @@ def begin_crawl():
             if not line or line.startswith("#"):
                 continue  # skip blank and commented out lines
 
+            print("Crawling url", line)
+
             page, html = make_request(line)
             count = 0
 
             # look for subcategory links on this page
-            subcategories = page.findAll("div", "bxc-grid__image")  # downward arrow graphics
-            subcategories.extend(page.findAll("li", "sub-categories__list__item"))  # carousel hover menu
+            subcategories = page.findAll(
+                "div", "bxc-grid__image")  # downward arrow graphics
+            # carousel hover menu
+            subcategories.extend(page.findAll(
+                "li", "sub-categories__list__item"))
             sidebar = page.find("div", "browseBox")
             if sidebar:
                 subcategories.extend(sidebar.findAll("li"))  # left sidebar
@@ -40,7 +45,6 @@ def begin_crawl():
                 link = link["href"]
                 count += 1
                 enqueue_url(link)
-
             log("Found {} subcategories on {}".format(count, line))
 
 
@@ -48,9 +52,10 @@ def fetch_listing():
 
     global crawl_time
     url = dequeue_url()
+    log('Viewing dequeue_url: %s' % url)
     if not url:
         log("WARNING: No URLs found in the queue. Retrying...")
-        pile.spawn(fetch_listing)
+        # pile.spawn(fetch_listing)
         return
 
     page, html = make_request(url)

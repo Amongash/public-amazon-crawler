@@ -4,11 +4,12 @@ current_dir = os.path.dirname(os.path.realpath(__file__))
 
 # Database
 database = "amazon_crawler"
-host = ""
-user = ""
+host = "localhost"
+user = "user"
+passwd = "password"
 
 # Redis
-redis_host = ""
+redis_host = "localhost"
 redis_port = 6379
 redis_db = 0
 
@@ -33,13 +34,15 @@ proxy_port = ""
 
 # Crawling Logic
 start_file = os.path.join(current_dir, "start-urls.txt")
-max_requests = 2 * 10**6  # two million
-max_details_per_listing = 9999
+# max_requests = 2 * 10**6  # two million
+max_requests = 2
+# max_details_per_listing = 9999
+max_details_per_listing = 100
 
 # Threads
 max_threads = 200
 
 # Logging & Storage
 log_stdout = True
-image_dir = "/tmp/crawl_images"
+image_dir = "tmp/crawl_images"
 export_dir = "/tmp"
